@@ -6,7 +6,7 @@
 struct Empresa
 {
 char Nombre_empresa;
-long int RUC_empresa=841264398;
+long int RUC_empresa;
 char Direccion_empresa;
 char trabajadores_nombre_estado[rowE][colE];
 long int numero_Factura;
