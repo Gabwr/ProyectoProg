@@ -1,15 +1,15 @@
 #include <string.h>
-#define rowE 2
-#define colE 6
+#define rowE 5
+#define colE 2
 #define rowS 3
-#define colS 3
+#define colS 2
 struct Empresa
 {
 char Nombre_empresa;
 long int RUC_empresa;
 char Direccion_empresa;
 char trabajadores_nombre_estado[rowE][colE];
-long int numero_Factura;
+long int numero_Factura[10];
 };
 
 struct Clientes
@@ -22,10 +22,8 @@ char direccion_cliente;
 
 struct Servicio
 {
-char codigoservicio_nombreservicio_precioservicio[rowS][colS];
-int servicio_seleccionado;
-int cantidad_de_servicios;
-int datos_servicio;
+char nmservicio_$servicio[rowS][colS];
+char servicio_seleccionado[3][3];
 };
 struct Proyecto
 {
