@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 #define rowE 5
 #define colE 2
 #define rowS 3
@@ -31,10 +32,13 @@ Empresa datos_emp;
 Clientes datos_clt;
 Servicio datos_srv;
 };
-
+void ingreso_datos_C(Proyecto *x) 
+{
+    printf("coloque el nombre del cliente");
+}
 int main()
 {
-    Empresa a1;
-
+    Proyecto a1;
+    ingreso_datos_C(&a1);
     return 0;
 }
