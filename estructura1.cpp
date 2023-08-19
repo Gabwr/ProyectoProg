@@ -1,7 +1,9 @@
 #include <string.h>
+#include <string>
 #include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
 #define rowE 5
 #define colE 2
 #define rowS 3
@@ -11,11 +13,13 @@
 #define Cl 400
 struct Empresa
 {
-char Nombre_empresa;
-long int RUC_empresa;
-char Direccion_empresa;
-char trabajadores_nombre_estado[rowE][colE];
-long int numero_Factura[10];
+const char *Nombre_empresa = "NaturVerde";
+    const char *RUC_empresa = "2300548657002";
+    const char *Direccion_empresa = "Av. 6 de Diciembre y Gaspar de Vilaroel";
+    char trabajadores_nombre_estado[6][50];
+    int B[6]; 
+    int indiceActual = 0; 
+    int numero_Factura = 9;
 };
 
 struct Clientes
@@ -324,10 +328,9 @@ void MenuPrincipal()
 	printf("2.Buscar una factura\n");
 	printf("3.Modificar una factura\n");
 	printf("4.Eliminar una factura\n");
-	printf("5.Buscar una factura\n");
-	printf("6.Imprimir una factura\n");
-	printf("7.Imprimir todas las facturas\n");
-	printf("8.Salir del Menu\n");
+	printf("5.Imprimir una factura\n");
+	printf("6.Imprimir todas las facturas\n");
+	printf("7.Salir del Menu\n");
 	printf("Elija una opcion:\n");
 }
 void MenuPrincipal2()
@@ -388,6 +391,88 @@ void menudecedulas_ruc2(Proyecto z[Cl],int j, int *k)
 			}
 }
 scanf("%i",k);
+}
+
+void Trabajadores(Empresa &Empresa) {
+    int B[6];
+    char A[6][100]={"Stiven Celi","Gabriel Lopez","Alexander Toapanta","Maycol Gomez","Josue Castillo","Martin Correa"};
+
+// para guardar los nombres en la estructura de trabajadores nombres estado
+        for (int i = 0; i < 6; i++) {//5
+            strcpy(Empresa.trabajadores_nombre_estado[i],A[i] );
+            strcat(Empresa.trabajadores_nombre_estado[i], " (D)");
+            Empresa.B[i]=0;// Inicializar B con 0 (Disponible)
+        }
+}
+
+void cambiarestado(Empresa &Empresa){
+    if (Empresa.indiceActual >= 0 && Empresa.indiceActual < 6) {
+        if (strstr(Empresa.trabajadores_nombre_estado[Empresa.indiceActual], "D")) {
+            Empresa.B[Empresa.indiceActual] = 1; // Cambiar el valor en B a 1 (Ocupado)
+            strcpy(Empresa.trabajadores_nombre_estado[Empresa.indiceActual] + strlen(Empresa.trabajadores_nombre_estado[Empresa.indiceActual]) - 4, " (O)");
+        }
+    }
+}
+bool todosOcupados(Empresa &Empresa) {
+    for (int i = 0; i < 6; i++) {
+        if (Empresa.B[i] == 0) {
+            return false; // Al menos uno no está ocupado
+        }
+    }
+    return true; // Todos están ocupados
+}
+
+
+void cambiar_sin_estado(Empresa &Empresa, int k) {
+    k--;
+    printf("Trabajador Asignado:\n");
+    for (k ; k < 6; k++) {
+        char nombreCompleto[50];
+        strcpy(nombreCompleto, Empresa.trabajadores_nombre_estado[k]);
+
+        char *estadoPos = strstr(nombreCompleto, " (O)");
+        if (estadoPos == nullptr) {
+            estadoPos = strstr(nombreCompleto, " (D)");
+        }
+
+        if (estadoPos != nullptr) {
+            *estadoPos = '\0'; // Reemplazar el paréntesis y el estado por un carácter nulo
+        }
+
+        printf("- %s\n", nombreCompleto);
+        break;
+    }
+}
+
+
+
+void mostrarDatosEmpresa(Proyecto x[Cl], int j) 
+{
+    Trabajadores(x->datos_emp);
+    int contador=10+j,k=0;
+	const char *numeroSerie= "001-001-";
+	std::string NumS= numeroSerie;
+	std::string NumP= std::to_string(contador);
+	std::string NumeroF = NumS + NumP;
+
+    if (todosOcupados(x[Cl].datos_emp)) 	
+    printf("Ya no hay trabajadores disponibles.\n");
+    else {
+            printf("----DATOS EMPRESA----\n");
+            printf("Nombre Empresa: %s\n",x[j].datos_emp.Nombre_empresa);
+            printf("RUC Empresa: %s\n",x[j].datos_emp.RUC_empresa);
+            printf("Direccion Empresa (Matriz): %s\n",x[j].datos_emp.Direccion_empresa);
+            std::puts(NumeroF.c_str());
+            cambiarestado(x->datos_emp); // Cambiar estado para la siguiente impresión
+    for (k; k < 6; k++) 
+	{ //no va
+        cambiar_sin_estado(x->datos_emp, k);
+        break; //no va
+   	}//no va
+    k++;//no va
+    // Actualizar el índice para la siguiente impresión
+  x->datos_emp.indiceActual = (x->datos_emp.indiceActual + 1) % 6;
+		}
 }
 
 void cambiarM(Proyecto y[Cl],int j)
@@ -453,6 +538,7 @@ switch(h)
 	}
 	}while(h!=3);
 }
+
 void menuOp(Proyecto x[Cl])
 {
 	int f,cont=0,i=0;
@@ -469,13 +555,14 @@ void menuOp(Proyecto x[Cl])
 		{
 		case 1:
 		{
+			mostrarDatosEmpresa(x,i);
 			ingreso_datos_C(x,i);
 			i++;
 		}
 		break;
 		case 2:
 		{
-			if(x[0].datos_clt.cedula_cliente);
+			if(x[0].datos_clt.cedula_cliente)
 			{
 			printf("No existe facturas para buscar\n");
 			break;
@@ -484,7 +571,7 @@ void menuOp(Proyecto x[Cl])
 		break;
 		case 3:
 		{
-			if(x[0].datos_clt.cedula_cliente);
+			if(x[0].datos_clt.cedula_cliente)
 			{
 			printf("No existe facturas para Cambiar\n");
 			break;
@@ -494,7 +581,7 @@ void menuOp(Proyecto x[Cl])
 			break;
 		case 4:
 		{
-			if(x[0].datos_clt.cedula_cliente);
+			if(x[0].datos_clt.cedula_cliente)
 			{
 			printf("No existe facturas para Eliminar\n");
 			break;
@@ -503,7 +590,7 @@ void menuOp(Proyecto x[Cl])
 			break;
 		case 5:
 		{
-			if(x[0].datos_clt.cedula_cliente);
+			if(x[0].datos_clt.cedula_cliente)
 			{
 			printf("No existe facturas para imprimir una factura buscada\n");
 			break;
@@ -513,7 +600,7 @@ void menuOp(Proyecto x[Cl])
 			break;
 		case 6:
 		{
-			if(x[0].datos_clt.cedula_cliente);
+			if(x[0].datos_clt.cedula_cliente)
 			{
 			printf("No existe facturas para imprimir todas\n");
 			break;
