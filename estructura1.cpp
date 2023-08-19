@@ -317,7 +317,7 @@ void ingreso_datos_C(Proyecto x[Cl], int k)
 void MenuPrincipal()
 {
 	printf("================================================\n");
-	printf("Bienvenido al menu de Facturación de NaturVerde\n");
+	printf("Bienvenido al menu de Facturacion de NaturVerde\n");
 	printf("================================================\n");
 	printf("Que desea realizar?\n");
 	printf("1.Ingresar una nueva factura\n");
@@ -338,10 +338,9 @@ void MenuPrincipal2()
 	printf("2.Buscar una factura\n");
 	printf("3.Modificar una factura\n");
 	printf("4.Eliminar una factura\n");
-	printf("5.Buscar una factura\n");
-	printf("6.Imprimir una factura\n");
-	printf("7.Imprimir todas las facturas\n");
-	printf("8.Salir del Menu\n");
+	printf("5.Imprimir una factura\n");
+	printf("6.Imprimir todas las facturas\n");
+	printf("7.Salir del Menu\n");
 	printf("Elija una opcion:\n");
 }
 void menudecedulas_ruc(Proyecto z[Cl],int j, int *k)
@@ -461,7 +460,7 @@ void menuOp(Proyecto x[Cl])
 	{
 		MenuPrincipal();
 		scanf("%i",&f);
-		while(f<1||f>8)
+		while(f<1||f>7)
 		{
 		MenuPrincipal2();
 		scanf("%i",&f);
@@ -469,28 +468,57 @@ void menuOp(Proyecto x[Cl])
 		switch (f)
 		{
 		case 1:
-			{
-				ingreso_datos_C(x,i);
-				i++;
-			}
-			break;
+		{
+			ingreso_datos_C(x,i);
+			i++;
+		}
+		break;
 		case 2:
-			1+1;
+		{
+			if(x[0].datos_clt.cedula_cliente);
+			{
+			printf("No existe facturas para buscar\n");
 			break;
+			}
+		}
+		break;
 		case 3:
+		{
+			if(x[0].datos_clt.cedula_cliente);
+			{
+			printf("No existe facturas para Cambiar\n");
+			break;
+			}
 			cambiarM(x,i);
+		}
 			break;
 		case 4:
-			1+1;
+		{
+			if(x[0].datos_clt.cedula_cliente);
+			{
+			printf("No existe facturas para Eliminar\n");
+			break;
+			}
+		}
 			break;
 		case 5:
-			1+1;
+		{
+			if(x[0].datos_clt.cedula_cliente);
+			{
+			printf("No existe facturas para imprimir una factura buscada\n");
+			break;
+			}
+
+		}
 			break;
 		case 6:
-			1+1;
+		{
+			if(x[0].datos_clt.cedula_cliente);
+			{
+			printf("No existe facturas para imprimir todas\n");
 			break;
-		case 7:
-			1+1;
+			}
+		}
 			break;
 		default:
 		{
