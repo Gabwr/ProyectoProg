@@ -562,7 +562,7 @@ void menuOp(Proyecto x[Cl])
 		break;
 		case 2:
 		{
-			if(x[0].datos_clt.cedula_cliente)
+			if(x[0].datos_clt.cedula_cliente==0)
 			{
 			printf("No existe facturas para buscar\n");
 			break;
@@ -571,7 +571,7 @@ void menuOp(Proyecto x[Cl])
 		break;
 		case 3:
 		{
-			if(x[0].datos_clt.cedula_cliente)
+			if(x[0].datos_clt.cedula_cliente==0)
 			{
 			printf("No existe facturas para Cambiar\n");
 			break;
@@ -581,7 +581,7 @@ void menuOp(Proyecto x[Cl])
 			break;
 		case 4:
 		{
-			if(x[0].datos_clt.cedula_cliente)
+			if(x[0].datos_clt.cedula_cliente==0)
 			{
 			printf("No existe facturas para Eliminar\n");
 			break;
@@ -590,7 +590,7 @@ void menuOp(Proyecto x[Cl])
 			break;
 		case 5:
 		{
-			if(x[0].datos_clt.cedula_cliente)
+			if(x[0].datos_clt.cedula_cliente==0)
 			{
 			printf("No existe facturas para imprimir una factura buscada\n");
 			break;
@@ -600,7 +600,7 @@ void menuOp(Proyecto x[Cl])
 			break;
 		case 6:
 		{
-			if(x[0].datos_clt.cedula_cliente)
+			if(x[0].datos_clt.cedula_cliente==0)
 			{
 			printf("No existe facturas para imprimir todas\n");
 			break;
