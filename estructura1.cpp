@@ -11,6 +11,10 @@
 #define ced 10
 #define ruc 13
 #define Cl 400
+#define ser_fil 100
+#define MAX_ARBUSTOS 100
+#define MAX_CESPED 100
+#define MAX_PAVIMENTO 100
 struct Empresa
 {
 const char *Nombre_empresa = "NaturVerde";
@@ -25,15 +29,15 @@ const char *Nombre_empresa = "NaturVerde";
 struct Clientes
 {
 char nombre_cliente;
-unsigned long int ruc_cliente;
-unsigned long int cedula_cliente;
+long long int ruc_cliente;
+long long int cedula_cliente;
 char direccion_cliente;
 };
 
 struct Servicio
 {
-char nmservicio_$servicio[rowS][colS];
-char servicio_seleccionado[3][3];
+    char nmservicio_servicio[rowS][colS][200];
+    char servicio_seleccionado[rowS][colS][200];
 };
 struct Proyecto
 {
@@ -66,15 +70,15 @@ void validnom(char *x)
     }
 }
 
-void cedulavolveringresar(long int *a)
+void cedulavolveringresar(long long int *a)
 {
 	printf("coloque una cedula valida\n");
-		scanf("%ld",a);
+		scanf("%lld",a);
 }
 
-void crear (int B[ced], long int *c)
+void crear (int B[ced], long long int *c)
 {	
-	long int  f=*c, cosc;
+	long long int  f=*c, cosc;
 	int  rsd;
 for(int i=9;i>=0;i--)
 	{
@@ -86,27 +90,22 @@ for(int i=9;i>=0;i--)
 	*c=f;
 }
 
-void validarced(unsigned long int *y)
+void validarced(long long int *y)
 {
-	long int b=*y;
+	long long int b=*y, llp=3999999999;
 	int A[ced],cont=0,s,res,mul=0,sumpr=0,sumimp=0,sumt=0;
 	do{
 	cont=0;
 	crear(A,&b);
-	if(b<0)
-		{
 	while(b<0)
 	{
-		if(b<0)
+		if(b<0||b>llp)
 		{
 			cedulavolveringresar(&b);
 			cont++;
 		}
 	}
-	}
-	if(A[0]==0&&A[1]==0)
-	{
-	while(A[0]==0&&A[1]==0)
+while(A[0]==0&&A[1]==0)
 	{
 		if(A[0]==0&&A[1]==0)
 			{
@@ -115,9 +114,6 @@ void validarced(unsigned long int *y)
 			crear(A,&b);
 			}
 	}
-	}
-	if(A[0]==2&&A[1]==4)
-	{
 	while(A[0]==2&&A[1]>4)
 	{
 		if(A[0]==2&&A[1]==4)
@@ -127,9 +123,6 @@ void validarced(unsigned long int *y)
 			crear(A,&b);
 			}
 	}
-	}
-	if(A[0]==3&&A[1]>4)
-	{
 	while(A[0]==3&&A[1]>4)
 	{
 		if(A[0]==3&&A[1]>4)
@@ -138,7 +131,6 @@ void validarced(unsigned long int *y)
 			cont++;
 			crear(A,&b);
 			}
-	}
 	}
 	mul=0;
 	sumimp=0;
@@ -171,16 +163,16 @@ void validarced(unsigned long int *y)
 	*y=b;
 
 }
-void Ruccolveringreso(long int *c)
+void Ruccolveringreso(long long int *c)
 {
-	printf("coloque un RUC valida\n");
-		scanf("%ld",c);
+	printf("coloque un RUC valido\n");
+		scanf("%lld",c);
 }
-void CrearR(int C[ruc], int *d)
+void CrearR(int C[ruc], long long int *d)
 {
-	long int  f=*d, cosc;
+	long long int  f=*d, cosc;
 	int  rsd;
-	for(int i=13;i>=0;i--)
+	for(int i=12;i>=0;i--)
 	{
 	cosc=*d/10;
 	rsd=*d%10;
@@ -189,11 +181,11 @@ void CrearR(int C[ruc], int *d)
 	}
 	*d=f;	
 }
-void CrearC(int C[9], int *d)
+void CrearC(int C[9], long long int *d)
 {
-	long int  f=*d, cosc;
+	long long int  f=*d, cosc;
 	int  rsd;
-	for(int i=9;i>=0;i--)
+	for(int i=8;i>=0;i--)
 	{
 	cosc=*d/10;
 	rsd=*d%10;
@@ -202,90 +194,148 @@ void CrearC(int C[9], int *d)
 	}
 	*d=f;	
 }
-void vaidarRU(unsigned long int *y)
+void CrearD(int C[8], long long int *d)
 {
-long int b=*y;
-	int A[ruc],B[9],d,cont=0,ver,sumd=0,res;
+	long long int  f=*d, cosc;
+	int  rsd;
+	for(int i=7;i>=0;i--)
+	{
+	cosc=*d/10;
+	rsd=*d%10;
+	C[i]=rsd;
+	*d=cosc;
+	}
+	*d=f;	
+}
+void vaidarRU(long long int *y)
+{
+long long int b=*y,c,d;
+int A[ruc],B[9],C[8],cont=0,sumd=0,res,cont1=0;
 	d=432765432;
-	CrearC(B,&d);
-	do{
+	c=32765432;
+CrearC(B,&d);
+CrearD(C,&c);
+do{
+CrearR(A,&b);
+if(A[2]==8||A[2]==7||A[2]<6)
+{
+	while(A[2]==8||A[2]==7||A[2]<6)
+	{
+		Ruccolveringreso(&b);
+		CrearR(A,&b);
+		cont++;
+	}
+}
+//ruc para Juridico/extranjero
+if(A[2]==9)
+{
 	cont=0;
-	crear(A,&b);
-	if(b<0)
-		{
+	cont1=0;
+	CrearR(A,&b);
 	while(b<0)
 	{
-		if(b<0)
+		if(b<0||b>3000000000000)
 		{
 			Ruccolveringreso(&b);
 			cont++;
 		}
 	}
-	}
-	if(A[0]==0&&A[1]==0)
-	{
 	while(A[0]==0&&A[1]==0)
 	{
 		if(A[0]==0&&A[1]==0)
 			{
 			Ruccolveringreso(&b);
 			cont++;
-			crear(A,&b);
+			CrearR(A,&b);
 			}
 	}
-	}
-	if(A[0]==2&&A[1]==4)
-	{
 	while(A[0]==2&&A[1]>4)
 	{
 		if(A[0]==2&&A[1]==4)
 			{
 			Ruccolveringreso(&b);
 			cont++;
-			crear(A,&b);
+			CrearR(A,&b);
 			}
 	}
-	}
-	if(A[2]!=9)
-	{
 	while(A[2]!=9)
 	{
 		if(A[2]!=9)
 			{
 			Ruccolveringreso(&b);
 			cont++;
-			crear(A,&b);
+			CrearR(A,&b);
 			}
 	}
-	}
-	if(A[10]!=0&&A[11]!=0&&A[12]!=1)
 	while(A[10]!=0&&A[11]!=0&&A[12]!=1)
 	{
 		if(A[10]!=0&&A[11]!=0&&A[12]!=1)
 			{
 			Ruccolveringreso(&b);
 			cont++;
-			crear(A,&b);
+			CrearR(A,&b);
 			}
 	}
 	sumd=0;
-	ver=A[9];
 	for(int i=0;i<10;i++)
 	{
-		sumd+=(A[0]*B[0]);
+		sumd+=(A[i]*B[i]);
 	}
 	res=sumd%11;
-	if (A[10]!=res)
+	if (A[9]!=(11-res))
 	{
 		Ruccolveringreso(&b);
 		cont++;
-		crear(A,&b);
+		CrearR(A,&b);
 	}
-	}while(cont!=0);
-	
 	*y=b;
-
+	}
+//ruc publicos	
+if(A[2]==6)
+{
+cont=0;
+cont1++;
+while(b<0)
+{
+	if(b<0||b>3000000000000)
+	{
+		Ruccolveringreso(&b);
+		cont++;}
 }
+while(A[0]==0&&A[1]==0)
+{
+	if(A[0]==0&&A[1]==0)
+		{
+		Ruccolveringreso(&b);
+		cont++;
+		CrearR(A,&b);
+		}
+}
+while(A[0]==2&&A[1]>4)
+{
+	if(A[0]==2&&A[1]==4)
+		{
+		Ruccolveringreso(&b);
+		cont++;
+		CrearR(A,&b);
+		}
+}
+sumd=0;
+	for(int i=0;i<8;i++)
+	{
+		sumd+=(A[i]*C[i]);
+	}
+	res=sumd%11;
+	if (A[8]!=(11-res))
+	{
+		Ruccolveringreso(&b);
+		cont++;
+		CrearR(A,&b);
+	}
+}
+}while(cont!=0);
+}
+
 
 void ingreso_datos_C(Proyecto x[Cl], int k) 
 {
@@ -303,14 +353,16 @@ void ingreso_datos_C(Proyecto x[Cl], int k)
     switch (a)
     {
     case (1):
-        printf("Ingrese el RUC del cliente\n");
-		scanf("%ld",&x[k].datos_clt.ruc_cliente);
+	{
+		printf("Ingrese el RUC del cliente\n");
+		scanf("%lld",&x[k].datos_clt.ruc_cliente);
 		vaidarRU(&x[k].datos_clt.ruc_cliente);
-        break;
+	}    
+		break;
     
     default:
         printf("Ingrese la Cedula del cliente\n");
-        scanf("%lu",&x[k].datos_clt.cedula_cliente);
+        scanf("%lld",&x[k].datos_clt.cedula_cliente);
         validarced(&x[k].datos_clt.cedula_cliente);
         break;
     }
@@ -355,16 +407,16 @@ void menudecedulas_ruc(Proyecto z[Cl],int j, int *k)
 			if(z[t].datos_clt.cedula_cliente!=0)
 			{
 			if(z[t].datos_clt.cedula_cliente<1000000000)
-			printf("%i. 0%lu\t%s\n",t+1,z[t].datos_clt.cedula_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. 0%lld\n",t+1,z[t].datos_clt.cedula_cliente,z[t]);
 			else
-			printf("%i. %lu\t%s\n",t+1,z[t].datos_clt.cedula_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. %lld\n",t+1,z[t].datos_clt.cedula_cliente,z[t]);
 			}
 			else
 			{
 			if(z[t].datos_clt.ruc_cliente<p)
-			printf("%i. 0%lu\t%s\n",t+1,z[t].datos_clt.ruc_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. 0%lld\n",t+1,z[t].datos_clt.ruc_cliente);
 			else
-			printf("%i. %lu\t%s\n",t+1,z[t].datos_clt.ruc_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. %lld\n",t+1,z[t].datos_clt.ruc_cliente);
 			}
 }
 scanf("%i",k);
@@ -378,16 +430,16 @@ void menudecedulas_ruc2(Proyecto z[Cl],int j, int *k)
 			if(z[t].datos_clt.cedula_cliente!=0)
 			{
 			if(z[t].datos_clt.cedula_cliente<1000000000)
-			printf("%i. 0%lu\t%s\n",t+1,z[t].datos_clt.cedula_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. 0%lld\n",t+1,z[t].datos_clt.cedula_cliente);
 			else
-			printf("%i. %lu\t%s\n",t+1,z[t].datos_clt.cedula_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. %lld\n",t+1,z[t].datos_clt.cedula_cliente);
 			}
 			else
 			{
 			if(z[t].datos_clt.ruc_cliente<p)
-			printf("%i. 0%lu\t%s\n",t+1,z[t].datos_clt.ruc_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. 0%lld\n",t+1,z[t].datos_clt.ruc_cliente);
 			else
-			printf("%i. %lu\t%s\n",t+1,z[t].datos_clt.ruc_cliente,z[t].datos_clt.nombre_cliente);
+			printf("%i. %lld\n",t+1,z[t].datos_clt.ruc_cliente);
 			}
 }
 scanf("%i",k);
@@ -477,7 +529,7 @@ void mostrarDatosEmpresa(Proyecto x[Cl], int j)
 
 void cambiarM(Proyecto y[Cl],int j)
 {
-	int h=0,i=0,k=0,p=0,l=0;
+	int h=0,i=0,k=0;
 	do{
 	printf("Que desea modificar? \n1.Datos Cliente \n2.Datos Servicio \n3.volver al menu anterior\n");
 	scanf("%i",&h);
@@ -494,24 +546,79 @@ switch(h)
 		case 1:
 		{
 			do{
-			printf("Que desea cambiar del Cliente \n1.Nombre del Cliente \n2.Dirrección del Cliente \n3.Cedula del cliente \n4.volver al menu anterior\n");
+			printf("Que desea cambiar del Cliente \n1.Nombre del Cliente \n2.Cedula/ruc del cliente \n3.Dirrección del Cliente  \n4.volver al menu anterior\n");
 			scanf("%i",&i);
 			while(i<1||i>4)
+			{
+			printf("Escoja una opción existente \n1.Nombre del Cliente \n2.Cedula/ruc del cliente \n3.Dirrección del Cliente  \n4.volver al menu anterior\n");
+			scanf("%i",&i);
+			}
 			switch(i)
 			{
 			case 1:
-			1+1;
+			{
+			printf("Escriba el nuevo nombre\n");
+			fflush(stdin);
+			gets(&y[k].datos_clt.nombre_cliente);
+			}
+			break;
+			case 2:
+			{
+			do{
+			printf("Que desea cambiar 1.Cedula \n 2.Ruc \n 3. volver almenu anterior\n");
+			scanf("%i",&j);
+			switch (j)
+			{
+			case 1:
+			{
+				if(y[k].datos_clt.cedula_cliente==0)
+				printf("No hay cedula para cambiar\n");
+				else
+				{
+				printf("coloque la nueva cedula\n");
+				scanf("%lld",&y[k].datos_clt.cedula_cliente);
+				validarced(&y[k].datos_clt.cedula_cliente);
+				}
+			}
+				break;
+			case 2:
+			{
+				if(y[k].datos_clt.ruc_cliente==0)
+				printf("No hay Ruc que cambiar\n");
+				else
+				{			
+				printf("coloque el nuevo RUC\n");
+				scanf("%lld",&y[k].datos_clt.ruc_cliente);
+				vaidarRU(&y[k].datos_clt.ruc_cliente);
+				}
+			}
 			break;
 			default:
-			1+2;
+				printf("Volviendo al menu anterior\n");
+				system("pause"); 
+			}
+			}while(j!=3);
+			}
+			break;
+			case 3:
+			{
+				fflush(stdin);
+				printf("Escriba la nueva Dirrección\n");
+				gets(&y[k].datos_clt.direccion_cliente);	
+			}
+			break;
+			default:
+			{
+			printf("Volviendo al menu principal\n");
+			system("pause"); 
+			}
 			}
 			}while(i!=4);
 		}
 		break;
 		case 2:
 		{
-			do
-			{
+			do{
 			printf("Que desea cambiar de los servicios del cliente\n");
 
 			scanf("%i",&i);
@@ -529,15 +636,180 @@ switch(h)
 				break;
 				default:
 				printf("volviendo al menu anterior\n");
+				system("pause"); 
 			}
 			}while(i!=2);
 			}
 		break;
 		default:
 			printf("volviendo al menu anterior\n");
+			system("pause"); 
 	}
 	}while(h!=3);
 }
+
+void acomodar(struct Proyecto x[Cl], int z, int q, int r, int l)
+{
+    if (z > 0)
+    {
+        for (int i = 0; i < z; i++)
+        {
+            strcpy(x[l].datos_srv.servicio_seleccionado[i][0], "Cortar cesped");
+            strcpy(x[l].datos_srv.servicio_seleccionado[i][1], x[l].datos_srv.nmservicio_servicio[0][i]);
+            printf("Cortar cesped %.2f metros\n", atof(x[l].datos_srv.nmservicio_servicio[0][i]));
+        }
+    }
+    if (r > 0)
+    {
+        for (int i = 0; i < r; i++)
+        {
+            strcpy(x[l].datos_srv.servicio_seleccionado[z + i][0], "Podar arbustos");
+            strcpy(x[l].datos_srv.servicio_seleccionado[z + i][1], x[l].datos_srv.nmservicio_servicio[1][i]);
+            printf("Podar arbustos %d arbustos\n", atoi(x[l].datos_srv.nmservicio_servicio[1][i]));
+        }
+    }
+    if (q > 0)
+    {
+        for (int i = 0; i < q; i++)
+        {
+            strcpy(x[l].datos_srv.servicio_seleccionado[z + r + i][0], "Limpieza de pavimento");
+            strcpy(x[l].datos_srv.servicio_seleccionado[z + r + i][1], x[l].datos_srv.nmservicio_servicio[2][i]);
+            printf("Limpieza de pavimento %.2f metros\n", atof(x[l].datos_srv.nmservicio_servicio[2][i]));
+        }
+    }
+    printf("\n");
+}
+
+void servicios(Proyecto x[Cl], int l)
+{
+    char o[100],k[100],h[100],u[100],f[100],w[100],v[3][2][100], m[100],n[100]; 
+    const char *s="s",*t="n";
+     int z = 0, q = 0, r = 0,e=0, g=0, B[MAX_ARBUSTOS];
+    float A[MAX_CESPED ],C[MAX_ARBUSTOS],D[MAX_PAVIMENTO];
+    do
+    {
+        printf("Elija uno de los siguientes servicios:\n");
+        strcpy(v[0][0], "Cortar cesped");
+        strcpy(v[1][0], "Podar arbustos");
+        strcpy(v[2][0], "Limpieza de pavimento");
+        strcpy(v[0][1], "4$ el mt2");
+        strcpy(v[1][1], "2-5 metros(4$)\t 6-10 metros(10$)\t 10-15 metros(20$)\t mas de 15 metros (40$)");
+        strcpy(v[2][1], "5$ el mt2");
+        
+        for (int i = 0; i < rowS; i++)
+        {
+            for (int j = 0; j < colS; j++)
+            {
+                printf("%s\t", v[i][j]);
+            }
+            printf("\n");
+        }
+        
+        printf("Escriba el servicio que desee:\t");
+        gets(o);
+        
+        while (strcasecmp(v[0][0], o) != 0 &&
+               strcasecmp(v[1][0], o) != 0 &&
+               strcasecmp(v[2][0], o) != 0)
+        {
+            printf("Ingrese un servicio valido: ");
+            fgets(o, sizeof(o), stdin);
+    		o[strcspn(o, "\n")] = '\0';
+        }
+         if (strcasecmp(v[0][0], o) == 0)
+				{
+				    z++;
+				    printf("Cuantos metros de cesped desea cortar:\t");
+				    gets(h);
+				    while (atof(h) == 0 || atof(h) < 0)
+				    {
+				        printf("Ingrese un valor numerico positivo distinto de 0:\t");
+				        gets(h);
+				    }
+				    sprintf(w, "%.2f", atof(h));
+				    strcpy(x[l].datos_srv.nmservicio_servicio[0][z - 1], w);
+				}
+    if (strcasecmp(v[1][0], o) == 0)
+{
+    r++;
+
+    printf("Cuantos arbustos desea podar:\t");
+    gets(k);
+    while (atoi(k) == 0 || atoi(k) < 0)
+    {
+        printf("Ingrese un valor numerico positivo distinto de 0:\t");
+        gets(k);
+    }
+    sprintf(w, "%d", atoi(k));
+    strcpy(x[l].datos_srv.nmservicio_servicio[1][r - 1], w);
+
+    for (int i = g; i < r; i++)
+    {
+        B[i] = atoi(k);
+    }
+    e = atoi(k);
+    for (int i = 0; i < e; i++)
+    {
+        printf("Ingrese la medida en metro del arbusto %d:\t", i + 1);
+        gets(f);
+        while (atof(f) == 0 || atof(f) < 0)
+        {
+            printf("Ingrese un valor numerico positivo distinto de 0:\t");
+            gets(f);
+        }
+        C[g * MAX_ARBUSTOS + i] = atof(f);
+    }
+    g++;
+}
+            if (strcasecmp(v[2][0], o) == 0)
+            {
+                q++;
+                printf("Cuantos metro de pavimento desea limpiar:\t");
+                gets (u);
+              while (atof(u)==0||atof(u)<0)
+                {
+                	printf("Ingrese un valor numerico positivo distinto de 0:\t");
+                	gets (u);
+				}
+						sprintf(m, "%.2f", atof(u));
+					    strcpy(x[l].datos_srv.nmservicio_servicio[2][q - 1], m);
+            } 
+        printf("Desea elegir otro servicio (s/n): ");
+	       fgets(w, sizeof(w), stdin);
+	        w[strcspn(w, "\n")] = '\0';
+        if(strcasecmp(w,s) != 0 &&strcasecmp(w,t) != 0 )
+        {
+        	while (strcasecmp(w,s) != 0 &&strcasecmp(w,t) != 0 )
+        	{
+        		printf("Las opciones validas son si(s) o no (n),ingres una de las opciones validas:");
+	        	fgets(w, sizeof(w), stdin);
+	            w[strcspn(w, "\n")] = '\0';
+			}
+		}
+    } while (strcasecmp(w,s) == 0 );
+    printf("Resumen de selecciones:\n");
+    printf("Cortar cesped: %d veces\n", z);
+    printf("Podar arbustos: %d veces\n", r);
+    printf("Limpieza de pavimento: %d veces\n", q);
+   for (int i = 0; i < z; i++)
+        {
+            printf("Metro %d de cesped: %.2f\n", i + 1, atof(x[l].datos_srv.nmservicio_servicio[0][i]));
+        }
+        for (int i = 0; i < q; i++)
+        {
+            printf("Metro %d de pavimento: %.2f\n", i + 1, atof(x[l].datos_srv.nmservicio_servicio[2][i]));
+        }
+for (int i = 0; i < r; i++)
+{
+    printf("Podar arbustos - Cantidad: %.2f\n", atof(x[l].datos_srv.nmservicio_servicio[1][i]));
+    for (int j = 0; j < B[i]; j++)
+    {
+        printf("Medida del arbusto %d: %.2f\n", j + 1, C[i * MAX_ARBUSTOS + j]);
+    }
+}
+acomodar(x,z,q,r,l);
+}
+
 
 void menuOp(Proyecto x[Cl])
 {
@@ -557,6 +829,7 @@ void menuOp(Proyecto x[Cl])
 		{
 			mostrarDatosEmpresa(x,i);
 			ingreso_datos_C(x,i);
+			servicios(x,i);
 			i++;
 		}
 		break;
@@ -611,6 +884,7 @@ void menuOp(Proyecto x[Cl])
 		{
 			printf("Gracias por utilizar el programa");
 			cont++;
+			system("pause"); 
 		}
 		}
 	} while (cont<1);
@@ -618,7 +892,7 @@ void menuOp(Proyecto x[Cl])
 }
 int main()
 {
-    Proyecto a1[Cl];
-	menuOp(a1);
+    Proyecto a2[Cl];
+	menuOp(a2);
     return 0;
 }
