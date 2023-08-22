@@ -45,7 +45,7 @@ Empresa datos_emp;
 Clientes datos_clt;
 Servicio datos_srv;
 };
-void validDir(char *x)
+void validDir(char x[100])
 {
 	 size_t found1 = std::string(x).find("AV.");
 	size_t found2 = std::string(x).find("Calle.");
@@ -478,6 +478,14 @@ void Trabajadores(Empresa &Empresa) {
             Empresa.B[i]=0;// Inicializar B con 0 (Disponible)
         }
 }
+bool todosOcupados(Empresa &Empresa, int i) {
+    for (i ; i < 6; i++) {
+        if (Empresa.B[i] == 0) {
+            return false; // Al menos uno no está ocupado
+        }
+    }
+    return true; // Todos están ocupados
+}
 
 void cambiarestado(Empresa &Empresa){
     if (Empresa.indiceActual >= 0 && Empresa.indiceActual < 6) {
@@ -486,14 +494,6 @@ void cambiarestado(Empresa &Empresa){
             strcpy(Empresa.trabajadores_nombre_estado[Empresa.indiceActual] + strlen(Empresa.trabajadores_nombre_estado[Empresa.indiceActual]) - 4, " (O)");
         }
     }
-}
-bool todosOcupados(Empresa &Empresa) {
-    for (int i = 0; i < 6; i++) {
-        if (Empresa.B[i] == 0) {
-            return false; // Al menos uno no está ocupado
-        }
-    }
-    return true; // Todos están ocupados
 }
 
 
@@ -513,22 +513,21 @@ void cambiar_sin_estado(Empresa &Empresa, int k) {
         }
 
         printf("- %s\n", nombreCompleto);
+        k++;
         break;
     }
 }
 
-
-
-void mostrarDatosEmpresa(Proyecto x[Cl], int j) 
+void mostrarDatosEmpresa(Proyecto x[Cl], int j,int k)
 {
     Trabajadores(x->datos_emp);
-    int contador=10+j,k=0;
+    int contador=10+j;
 	const char *numeroSerie= "001-001-";
 	std::string NumS= numeroSerie;
 	std::string NumP= std::to_string(contador);
 	std::string NumeroF = NumS + NumP;
 
-    if (todosOcupados(x[Cl].datos_emp)) 	
+    if (todosOcupados(x->datos_emp,k))
     printf("Ya no hay trabajadores disponibles.\n");
     else {
             printf("----DATOS EMPRESA----\n");
@@ -537,12 +536,11 @@ void mostrarDatosEmpresa(Proyecto x[Cl], int j)
             printf("Direccion Empresa (Matriz): %s\n",x[j].datos_emp.Direccion_empresa);
             std::puts(NumeroF.c_str());
             cambiarestado(x->datos_emp); // Cambiar estado para la siguiente impresión
-    for (k; k < 6; k++) 
-	{ //no va
+    for (k; k < 6; k++)
+	{
         cambiar_sin_estado(x->datos_emp, k);
-        break; //no va
-   	}//no va
-    k++;//no va
+        break;
+   	}
     // Actualizar el índice para la siguiente impresión
   x->datos_emp.indiceActual = (x->datos_emp.indiceActual + 1) % 6;
 		}
@@ -647,18 +645,20 @@ switch(h)
 		case 2:
 		{
 			do{
-			printf("Que desea cambiar de los servicios del cliente\n1.Quitar un servicio\n2.Cambiar un servicio\n3.Volver al menu principal\n");
+			printf("Que desea cambiar de los servicios del cliente\n1.Cambiar un servicio\n2.Volver al menu principal\n");
 			scanf("%i",&i);
 			while(i<1||i>2)
 			{
-			printf("Escoja una opción valida\n1.Quitar un servicio\n2.Cambiar un servicio\n3.Volver al menu principal\n");
+			printf("Escoja una opción valida\n1.Cambiar un servicio\n2.Volver al menu principal\n");
 			scanf("%i",&i);
 			}
 			switch(i)
 			{
 				case 1:
 				{
-				printf("\ningrese la nota parcial de la materia ");
+				printf("\nQue servicio desea cambiar?");
+				for(int t=0;t<3;t++)
+				puts(y[k].datos_srv.nmservicio_servicio[0][t]);
 				}
 				break;
 				default:
@@ -795,7 +795,7 @@ printf("\n");
 
 void menuOp(Proyecto x[Cl])
 {
-	int f,cont=0,i=0, z=0, q=0, r=0;;
+	int f,cont=0,i=0,k=0,z=0, q=0, r=0;;
 	do
 	{
 		MenuPrincipal();
@@ -809,7 +809,7 @@ void menuOp(Proyecto x[Cl])
 		{
 		case 1:
 		{
-			mostrarDatosEmpresa(x,i);
+			mostrarDatosEmpresa(x,i,k);
 			ingreso_datos_C(x,i);
 			servicios(x,i,&z, &q, &r);
 			i++;
